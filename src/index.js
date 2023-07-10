@@ -2,7 +2,6 @@
 import './config/config.js'
 import router from './routes/index.routes.js'
 import express from 'express'
-//import multer from 'multer'
 import { engine } from 'express-handlebars'
 import { __dirname } from "./path.js";
 import * as path from 'path'
@@ -19,14 +18,30 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { log, middlewareLogger } from './middlewares/logger.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express'
+import cors from 'cors'
 
 const app = express()
 
 /*
-  ***********
-  Middlewares
-  ***********
+***********
+Middlewares
+***********
 */
+
+// * CORS config
+const whiteList = [
+  "http://localhost:3000",
+  "http://localhost:8080"
+]
+const corsOpts = {
+  origin: function (origin, callback) {
+    (whiteList.indexOf(origin) !== -1 || !origin)
+      ? callback(null, true)
+      : callback(new Error('Not allowed by CORS policy'))
+  },
+  credentials: true
+}
+app.use(cors(corsOpts))
 
 // * Express, Winston Logger and Session
 app.use(express.json())
@@ -44,6 +59,8 @@ app.use(session({
   saveUninitialized: false,
   rolling: false
 }))
+
+
 
 // * Swagger API documentation
 const swaggerOpts = {
@@ -94,19 +111,9 @@ export const transporter = nodemailer.createTransport({
   }
 });
 
+
 // ERROR HANDLER (LAST MIDDLEWARE TO USE)
 app.use(errorHandler)
-
-// Multer settings
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'src/public/img')
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, `${Date.now()}${file.originalname}`)
-//     }
-// })
-// const upload = multer({ storage: storage })
 
 const connectToMongoDB = async () => {
   await mongoose.connect(process.env.MONGO_URL, {
@@ -125,7 +132,9 @@ const server = app.listen(app.get("port"), () => {
 })
 
 // Socket server for chat service
-export const chatServer = new SocketServer(server)
+export const chatServer = new SocketServer(server, {
+  cors: { corsOpts }
+})
 log('info', `Chat server online`)
 chatServer.on("connection", async (socket) => {
   log('info', "Connection to chat detected")

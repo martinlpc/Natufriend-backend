@@ -34,7 +34,7 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    passport.authenticate('login', (err, user) => {
+    passport.authenticate('login', async (err, user) => {
       if (err) {
         req.logger.error(`Login error - ${err.message}`)
         return res.status(401).send({
@@ -44,14 +44,20 @@ export const loginUser = async (req, res, next) => {
       }
       if (!user) {
         req.logger.info(`Login error - wrong credentials`)
-        return res.status(401).send(`Wrong credentials`)
+        return res.status(401).send({
+          status: 'unauthorized',
+          message: 'Wrong credentials'
+        })
       }
       req.session.login = true
       req.session.user = user
 
+      // Register login date & time
+      req.session.user.role === 1 && await updateUser(req.session.user._id, { last_connection: new Date() })
+
       req.logger.info(`User logged in < ${req.session.user.email} >`)
 
-      return res.status(200).send(`Welcome ${req.session.user.first_name}`)
+      return res.status(200).send(req.session.user)
     })(req, res, next)
   } catch (error) {
     req.logger.error(`Error in log-in procedure - ${error.message}`)
@@ -173,10 +179,17 @@ export const resetPassword = async (req, res, next) => {
 export const destroySession = async (req, res) => {
   try {
     if (req.session.login) {
+
+      // Register last login date & time
+      req.session.user.role === 1 && await updateUser(req.session.user._id, { last_connection: new Date() })
+
       const username = req.session.user.first_name
       req.session.destroy()
       req.logger.info(`${username} logged out`)
-      res.status(200).send(`Session "${username}" terminated.`)
+      res.status(200).send({
+        status: 'success',
+        message: `${username} logged out`
+      })
     } else {
       req.logger.debug('No active session')
       return res.status(401).send(`No active session found`)
