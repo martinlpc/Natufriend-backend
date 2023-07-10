@@ -4,6 +4,5 @@ src/errors.log
 .eslint*
 Dockerfile
 src/public/uploads/*/*
-src/views
 src/routes/views.routes.js
 src\controllers\views.controller.js

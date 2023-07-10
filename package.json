@@ -9,7 +9,7 @@
         "testing": "nodemon src/index.js --mode TESTING",
         "prod": "nodemon src/index.js --mode PRODUCTION",
         "supertest": "mocha test/superTest.test.js",
-        "start": "node src/index.js"
+        "start": "node src/index.js --mode PRODUCTION"
     },
     "keywords": [],
     "author": "",

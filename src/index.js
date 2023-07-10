@@ -83,9 +83,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // * Handlebars as template engine
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', path.resolve(__dirname, './views'))
+// app.engine('handlebars', engine());
+// app.set('view engine', 'handlebars');
+// app.set('views', path.resolve(__dirname, './views'))
 
 // * Port setting
 app.set("port", process.env.PORT)
