@@ -43,7 +43,8 @@ const corsOpts = {
       ? callback(null, true)
       : callback(new Error('Not allowed by CORS policy'))
   },
-  credentials: true
+  credentials: true,
+  exposedHeaders: 'Access-Control-Allow-Origin'
 }
 app.use(cors(corsOpts))
 
