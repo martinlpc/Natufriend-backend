@@ -28,7 +28,8 @@ export const deleteCart = async (id) => {
 
 export const updateCart = async (id, info) => {
     try {
-        return await cartModel.findByIdAndUpdate(id, info);
+        return await cartModel.findByIdAndUpdate(id, info, { new: true });
+
     } catch (error) {
         throw new Error(error);
     }
@@ -57,14 +58,14 @@ export const updateProductQuantity = async (cartID, productID, newQty) => {
 export const removeFromCart = async (cartID, productID) => {
     try {
         const cart = await findCartById(cartID)
-        const productIndex = cart.products.findIndex(product => product.productId.equals(productID))
+        const productIndex = cart.products.findIndex(product => product.productId._id.equals(productID))
 
         if (productIndex === -1) {
             throw new Error(`Product not found in the specified cart`)
         } else {
             cart.products.splice(productIndex, 1)
             await cart.save()
-            return true
+            return cart
         }
     } catch (error) {
         throw new Error(error)

@@ -9,7 +9,7 @@
         "testing": "nodemon src/index.js --mode TESTING",
         "prod": "nodemon src/index.js --mode PRODUCTION",
         "supertest": "mocha test/superTest.test.js",
-        "start": "node src/index.js --mode PRODUCTION"
+        "start": "node src/index.js"
     },
     "keywords": [],
     "author": "",
@@ -22,7 +22,6 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
-        "express-handlebars": "^7.0.7",
         "express-session": "^1.17.3",
         "jsonwebtoken": "^9.0.0",
         "mongoose": "^7.0.5",

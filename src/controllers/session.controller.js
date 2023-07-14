@@ -207,7 +207,7 @@ export const getSession = async (req, res) => {
     if (req.session.login) {
       res.status(200).json(req.session.user);
     } else {
-      return res.status(404).send(`No active session found`)
+      return res.status(401).send(`No active session found`)
     }
   } catch (error) {
     res.status(500).send({

@@ -79,9 +79,9 @@ export const overwriteCart = async (req, res) => {
   if (req.session.login) {
     try {
       const cartID = req.session.user.cart_id
-      const productsToAdd = req.body
+      const newCartContent = req.body
 
-      const response = await updateCart(cartID, productsToAdd)
+      const response = await updateCart(cartID, { products: newCartContent })
 
       res.status(201).send({
         status: 'success',
@@ -105,7 +105,7 @@ export const changeProductQuantity = async (req, res) => {
       const { quantity } = req.body
       const newQuantity = parseInt(quantity)
 
-      const updatedCart = await updateProductQuantity(req.params.cid, req.params.pid, newQuantity)
+      const updatedCart = await updateProductQuantity(req.session.user.cart_id, req.params.pid, newQuantity)
 
       res.status(200).send({
         status: "success",
@@ -125,7 +125,7 @@ export const changeProductQuantity = async (req, res) => {
 
 export const removeProduct = async (req, res) => {
   try {
-    const cart = await removeFromCart(req.params.cid, req.params.pid)
+    const cart = await removeFromCart(req.session.user.cart_id, req.params.pid)
 
     res.status(200).send({
       status: "success",
@@ -173,11 +173,12 @@ export const purchaseCart = async (req, res) => {
       })
 
       const products = populatedCart.products
-      if (products === -1) {
+      if (!products.length) {
         throw new Error(`Cart empty, unable to continue with the purchase`)
       }
 
       let totalAmount = 0
+
       products.forEach(elem => {
         let stockBeforePurchase = parseInt(elem.productId.stock)
         let stockAfterPurchase = stockBeforePurchase - elem.quantity
@@ -202,7 +203,7 @@ export const purchaseCart = async (req, res) => {
         }
 
       })
-      req.logger.debug(`[purchase] total amount: $ ${totalAmount}`)
+      req.logger.debug(`[purchase] ------ TOTAL: $ ${totalAmount} ------`)
 
       if (totalAmount <= 0) {
 
@@ -229,10 +230,17 @@ export const purchaseCart = async (req, res) => {
       })
     } catch (error) {
       req.logger.error(error)
-      res.status(500).send({
-        message: `Error on purchase`,
-        error: error
-      })
+      if (error.message.includes('empty')) {
+        res.status(200).send({
+          status: 'aborted',
+          message: 'Cart is empty'
+        })
+      } else {
+        res.status(500).send({
+          message: `Error on purchase`,
+          error: error
+        })
+      }
     }
   } else {
     res.status(401).send({

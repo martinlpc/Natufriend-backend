@@ -2,7 +2,6 @@
 import './config/config.js'
 import router from './routes/index.routes.js'
 import express from 'express'
-import { engine } from 'express-handlebars'
 import { __dirname } from "./path.js";
 import * as path from 'path'
 import mongoose from 'mongoose';
@@ -128,7 +127,7 @@ connectToMongoDB()
 
 // Server launch
 const server = app.listen(app.get("port"), () => {
-  log('info', `Server running on http://localhost:${app.get("port")}`)
+  log('info', `Server running on port ${app.get("port")}`)
 })
 
 // Socket server for chat service
