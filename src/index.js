@@ -31,7 +31,11 @@ Middlewares
 const whiteList = [
   "http://localhost:3000",
   "http://localhost:8080",
-  "https://natufriend.onrender.com/"
+  "https://natufriend.onrender.com/",
+  "https://www.natufriend.onrender.com/",
+  "http://natufriend.onrender.com/",
+  "http://www.natufriend.onrender.com/",
+  "natufriend.onrender.com/"
 ]
 const corsOpts = {
   origin: function (origin, callback) {
