@@ -35,7 +35,8 @@ const whiteList = [
   "https://www.natufriend.onrender.com/",
   "http://natufriend.onrender.com/",
   "http://www.natufriend.onrender.com/",
-  "natufriend.onrender.com/"
+  "natufriend.onrender.com/",
+  "https://natufriend.onrender.com"
 ]
 const corsOpts = {
   origin: function (origin, callback) {
