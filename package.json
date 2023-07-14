@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "nodemon src/index.js --mode DEVELOPMENT",
         "testing": "nodemon src/index.js --mode TESTING",
-        "prod": "nodemon src/index.js --mode PRODUCTION",
+        "prod": "node src/index.js --mode PRODUCTION",
         "supertest": "mocha test/superTest.test.js",
         "start": "node src/index.js"
     },
