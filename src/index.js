@@ -30,7 +30,8 @@ Middlewares
 // * CORS config
 const whiteList = [
   "http://localhost:3000",
-  "http://localhost:8080"
+  "http://localhost:8080",
+  "https://natufriend.onrender.com/"
 ]
 const corsOpts = {
   origin: function (origin, callback) {
