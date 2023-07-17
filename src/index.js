@@ -45,7 +45,8 @@ const corsOpts = {
       : callback(new Error('Not allowed by CORS policy'))
   },
   credentials: true,
-  exposedHeaders: 'Access-Control-Allow-Origin'
+  exposedHeaders: 'Access-Control-Allow-Origin',
+
 }
 app.use(cors(corsOpts))
 
@@ -66,8 +67,8 @@ app.use(session({
   rolling: false,
   cookie: {
     domain: '.onrender.com',
-    sameSite: 'none',
-    maxAge: 1000 * 60 * 60
+    maxAge: 1000 * 60 * 60,
+    httpOnly: false
   }
 }))
 
