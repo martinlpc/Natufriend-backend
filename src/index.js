@@ -63,7 +63,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  rolling: false
+  rolling: false,
+  cookie: {
+    domain: '.onrender.com',
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60
+  }
 }))
 
 
