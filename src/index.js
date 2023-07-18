@@ -54,7 +54,7 @@ app.use(cors(corsOpts))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(middlewareLogger)
-app.use(cookieParser(process.env.COOKIE_SECRET))
+app.use(cookieParser(process.env.SESSION_SECRET))
 app.use(session({
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URL,
@@ -66,7 +66,8 @@ app.use(session({
   saveUninitialized: false,
   rolling: false,
   cookie: {
-    domain: 'natufriend.onrender.com',
+    sameSite: 'none',
+    domain: '.onrender.com',
     maxAge: 1000 * 60 * 60,
     httpOnly: false
   }
