@@ -66,7 +66,7 @@ app.use(session({
   saveUninitialized: false,
   rolling: false,
   cookie: {
-    domain: '.onrender.com',
+    domain: 'natufriend.onrender.com',
     maxAge: 1000 * 60 * 60,
     httpOnly: false
   }
